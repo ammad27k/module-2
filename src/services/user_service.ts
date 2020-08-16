@@ -20,8 +20,13 @@ export default class UserService {
         app.getDataSouce().update({_id : id}, { $set: user}, callback);
     }
 
+    public getAutoSuggestUsers(loginSubstring: string, limit : number, callback : any) : void {
+        const regex = new RegExp(`${loginSubstring}`, "g");
+        const filter = { login: { $regex: regex}};
+        app.getDataSouce().find(filter).limit(limit).exec(callback);
+    }
+
     public getAllUsers(callback : any) : void {
         app.getDataSouce().find({}, callback);
     }
-
 }

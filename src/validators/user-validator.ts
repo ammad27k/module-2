@@ -1,5 +1,4 @@
 import * as Joi from "@hapi/joi";
-import * as express from "express";
 
 import {
     ContainerTypes,
@@ -13,15 +12,17 @@ import {
   export const validator = createValidator({passError : true});
 
   export const bodySchema = Joi.object({
-    userId: Joi.string().required(),
-    name: {
+     name: {
         first_name: Joi.string().optional(),
         middle_name: Joi.string().optional(),
         last_name: Joi.string().optional()
     },
-    login: Joi.string().required(),
-    password: Joi.string().required(),
-    age: Joi.number().required(),
+    login: Joi.string().required().min(4).max(60),
+    password: Joi.string().pattern(
+      new RegExp('^(?=.*[0-9]{1,})(?=.*[a-zA-Z]{1,})([a-zA-Z0-9]+)$'),
+      'Password must contain letters and numbers'
+    ).required(),
+    age: Joi.number().required().min(4).max(130),
     email: Joi.string().required(),
     phone_number: Joi.string().optional(),
     gender: Joi.string().optional(),
@@ -29,15 +30,14 @@ import {
   });
 
   export const updateBodySchema = Joi.object({
-    userId: Joi.string().forbidden(),
     name: {
         first_name: Joi.string().optional(),
         middle_name: Joi.string().optional(),
         last_name: Joi.string().optional()
     },
-    login: Joi.string().optional(),
+    login: Joi.string().forbidden(),
     password: Joi.string().forbidden(),
-    age: Joi.number().optional(),
+    age: Joi.number().forbidden(),
     email: Joi.string().optional(),
     phone_number: Joi.string().optional(),
     gender: Joi.string().optional(),
@@ -50,7 +50,6 @@ import {
 
   export interface UserRequestSchema extends ValidatedRequestSchema {
     [ContainerTypes.Body]: {
-      userId : String,  
       name: Object,
       login : String,
       password : String,

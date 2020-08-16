@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import UserService from "../services/user_service";
 import { successResponse, databaseError, insufficientParameters } from '../utils/helpers';
 import { IUser } from "../models/user";
-import { convertToIUserFromRequest, convertToIUserFromRequestToUpdate, convertToIUserFromRequestToRemove } from '../utils/mapper';
+import { convertToIUserFromRequest, convertToIUserFromRequestForUpdate, convertToIUserFromRequestToRemove} from '../utils/mapper';
 
 export class UserController {
 
@@ -41,7 +41,7 @@ export class UserController {
 
     public updateUser(req: Request, res : Response) {
         if(req.params.id) {
-            const user : IUser =  convertToIUserFromRequestToUpdate(req);
+            const user : IUser =  convertToIUserFromRequestForUpdate(req);
             this.userService.updateUser(req.params.id, user, (err : any, data : any)  => {
                 if(!err) {
                     successResponse("Updated Successfull", data, res );
@@ -70,6 +70,16 @@ export class UserController {
         } else {
             insufficientParameters(res);
         }
+    }
+
+    public getAutoSuggestUsers(req : Request, res : Response) {
+        this.userService.getAutoSuggestUsers(req.params.sub, Number(req.params.limit) , (err : any, userList : Array<IUser>) => {
+            if(!err){
+                successResponse('SUCESS', userList, res);
+            }else{
+                databaseError(err, res);
+            }
+        });
     }
 
     public getAllUsers(req : Request, res : Response) {

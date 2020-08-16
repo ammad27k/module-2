@@ -24,6 +24,10 @@ export class ApplicationRoutes {
             this.userControler.removeUserWithSoftDeletion(req, res);
         });
 
+        app.get("/api/users/:sub/:limit", (req : Request, res : Response) => {
+            this.userControler.getAutoSuggestUsers(req, res);
+        });
+
         app.get("/api/users", (req : Request, res : Response) => {
             this.userControler.getAllUsers(req, res);
         });

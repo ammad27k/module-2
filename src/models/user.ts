@@ -1,6 +1,5 @@
 export interface IUser {
-    _id?: String;
-    userId?: String;
+    _id?: String,
     name?: {
         first_name?: String;
         middle_name?: String;

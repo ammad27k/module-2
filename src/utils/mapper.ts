@@ -2,12 +2,7 @@ import { Request } from "express";
 import { IUser } from "../models/user";
 
 export function convertToIUserFromRequest(req : Request) : IUser {
-
-    if(!req.body.name.first_name || !req.body.name.last_name || !req.body.email 
-        || !req.body.userId || !req.body.login || !req.body.password || !req.body.age) {
-            return null as any;
-        }
-
+    
     const user: IUser = {
         userId : req.body.userId,
         name: {
